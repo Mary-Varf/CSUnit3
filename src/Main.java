@@ -1,26 +1,17 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    static final int THREE_SEC = 3000;
     public static void main(String[] args) {
-        Clock clock = new Clock();
 
-        Thread displayThread = new TimeUpdater(clock);
-        displayThread.setPriority(Thread.MAX_PRIORITY);
+        Clock clock1 = new Clock(1000);
+        Thread displayThread1 = new TimeUpdater(clock1, "Height priority thread");
+        displayThread1.setPriority(Thread.MAX_PRIORITY);
 
-        Thread backgroundThread = new Thread(() -> {
-            while (true) {
-                System.out.println("Background task with low priority");
-                try {
-                    Thread.sleep(THREE_SEC);
-                } catch (InterruptedException e) {
-                    System.out.println("Background thread error: " + e.getMessage());
-                }
-            }
-        });
-        backgroundThread.setPriority(Thread.MIN_PRIORITY);
+        Clock clock2 = new Clock(3000);
+        Thread displayThread2 = new TimeUpdater(clock2, "Low priority thread");
+        displayThread1.setPriority(Thread.MIN_PRIORITY);
 
-        displayThread.start();
-        backgroundThread.start();
+        displayThread1.start();
+        displayThread2.start();
     }
 }
